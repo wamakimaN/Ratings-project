@@ -18,5 +18,5 @@ class Post(models.Model):
 class Rating(models.Model):
   post = models.ForeignKey(Post, on_delete = models.CASCADE)
   user = models.ForeignKey(User, on_delete = models.CASCADE)
-  remark = models.TextField(max_length = 200)
+  remark = models.TextField(max_length = 200,blank = True)
   stars = models.IntegerField(validators = [MinValueValidator(1),MaxValueValidator(5)])
