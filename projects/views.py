@@ -1,12 +1,17 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import  Rating
+from django.views.generic.list import ListView
+from .models import  Rating, Post
 from .serializer import RatingSerializer
 from rest_framework import status
 
 
 # Create your views here.
+class PostView(ListView):
+  template_name = 'home.html'
+  queryset = Post.objects.all()
+
 class RatingList(APIView):
   def get(self, request, formal=None):
     ratings = Rating.objects.all()
