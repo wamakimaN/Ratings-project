@@ -52,6 +52,19 @@ class PostCreate(View):
             return redirect('home')
         return render(request, 'new_post.html', {'form': form})
 
+@method_decorator(login_required, name='dispatch')
+class RatePost(View):
+    def get(self, request):
+        form = RateForm()
+        return render(request, 'rate.html', {'form': form})
+
+    def post(self, request):
+        form = RateForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, 'rate.html', {'form': form})
+
 def registration(request):
   form = UserCreationForm()
 
