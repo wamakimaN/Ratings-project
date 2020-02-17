@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
 from .forms import PostForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import  Rating, Post
 from .serializer import RatingSerializer
 from rest_framework import status
@@ -47,3 +48,14 @@ class PostCreate(View):
             form.save()
             return redirect('home')
         return render(request, 'new_post.html', {'form': form})
+
+def registration(request):
+  form = UserCreationForm()
+
+  if request.method == 'POST':
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      form.save()
+
+  context = {'form':form}
+  return render(request, 'signup.html', context)

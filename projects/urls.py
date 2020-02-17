@@ -5,6 +5,7 @@ from .views import PostView, PostDetailView
 from django.conf.urls.static import static
 
 urlpatterns = [
+  url(r'^signup/$',views.registration, name='signup'),
   url(r'^post/$', views.PostCreate.as_view(), name='post_new'),
   url(r'^$', views.PostView.as_view(), name='home'),
   url(r'^details/(?P<id>[\d]+)/', views.PostDetailView.as_view(), name='details'),
