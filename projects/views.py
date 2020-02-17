@@ -1,8 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views import View
+from .forms import PostForm
 from .models import  Rating, Post
 from .serializer import RatingSerializer
 from rest_framework import status
@@ -31,5 +33,17 @@ class PostDetailView(DetailView):
   queryset = Post.objects.all()
 
   def get_object(self):
-    id = self.kwargs.get("id") 
-    return get_object_or_404(Post, id=id)
+    id_ = self.kwargs.get("id") 
+    return get_object_or_404(Post, id=id_)
+
+class PostCreate(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'new_post.html', {'form': form})
+
+    def post(self, request):
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, 'new_post.html', {'form': form})
