@@ -9,6 +9,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import  Rating, Post
 from .serializer import RatingSerializer
 from rest_framework import status
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # Create your views here.
@@ -37,6 +39,7 @@ class PostDetailView(DetailView):
     id_ = self.kwargs.get("id") 
     return get_object_or_404(Post, id=id_)
 
+@method_decorator(login_required, name='dispatch')
 class PostCreate(View):
     def get(self, request):
         form = PostForm()
