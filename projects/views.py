@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404,redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.views import View
 from .forms import PostForm, RateForm
 from django.contrib.auth.forms import UserCreationForm
@@ -44,6 +43,14 @@ class PostDetail(DetailView):
     context['ratings'] = Rating.objects.filter(post=self.get_object())
     context['form'] = RateForm
     return context
+
+class PostRating(FormView):
+  form_class = RateForm
+  template_name = 'details.html'
+
+  def form_valid(self,form):
+    form.instance.profile.user = self.request.user
+
 
 @method_decorator(login_required, name='dispatch')
 class PostCreate(View):
