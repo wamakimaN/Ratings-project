@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404,redirect
+from django.shortcuts import render, get_object_or_404,redirect,reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import ListView, DetailView, FormView
@@ -30,16 +30,16 @@ class RatingList(APIView):
       return Response(serializers.data, status=status.HTTP_201_CREATED)
     return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PostDetail(DetailView):
+class PostDisplay(DetailView):
   template_name = 'details.html'
   model = Post
 
   def get_object(self):
-    object = super(PostDetail,self).get_object()
+    object = super(PostDisplay,self).get_object()
     return object
 
   def get_context_data(self, **kwargs):
-    context = super(PostDetail, self).get_context_data(**kwargs)
+    context = super(PostDisplay, self).get_context_data(**kwargs)
     context['ratings'] = Rating.objects.filter(post=self.get_object())
     context['form'] = RateForm
     return context
@@ -49,7 +49,23 @@ class PostRating(FormView):
   template_name = 'details.html'
 
   def form_valid(self,form):
-    form.instance.profile.user = self.request.user
+    form.instance.user = self.request.user
+    post = Post.objects.get(pk=self.kwargs['pk'])
+    form.instance.post = post
+    form.save()
+    return super(PostRating, self).form_valid(form)
+
+  def get_success_url(self):
+    return reverse('details',kwargs={'pk':self.kwargs['pk']})
+
+class PostDetail(View):
+  def get(self, request, *args,**kwargs):
+    view = PostDisplay.as_view()
+    return view(request, *args, **kwargs)
+  
+  def post(self, request, *args,**kwargs):
+    view = PostRating.as_view()
+    return view(request, *args, **kwargs)
 
 
 @method_decorator(login_required, name='dispatch')
