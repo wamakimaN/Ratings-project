@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
-from .forms import PostForm
+from .forms import PostForm, RateForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import  Rating, Post
 from .serializer import RatingSerializer
@@ -31,13 +31,19 @@ class RatingList(APIView):
       return Response(serializers.data, status=status.HTTP_201_CREATED)
     return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PostDetailView(DetailView):
+class PostDetail(DetailView):
   template_name = 'details.html'
-  queryset = Post.objects.all()
+  model = Post
 
   def get_object(self):
-    id_ = self.kwargs.get("id") 
-    return get_object_or_404(Post, id=id_)
+    object = super(PostDetail,self).get_object()
+    return object
+
+  def get_context_data(self, **kwargs):
+    context = super(PostDetail, self).get_context_data(**kwargs)
+    context['ratings'] = Rating.objects.filter(post=self.get_object())
+    context['form'] = RateForm
+    return context
 
 @method_decorator(login_required, name='dispatch')
 class PostCreate(View):

@@ -1,8 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>here we are</h1>
-{% for post in object_list %}
-{{post.name}}
-<img src="{{post.image.url}}" alt="">
-{%endfor%}
+<header class="jumbotron topper">
+  <H1 class="welcome">Apprater</H1>
+  <h3 class="sub">Rate My Apps</h3>
+</header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2 sm-0  hidden-xs"></div>
+    <div class="col-md-8 col-xs-12">
+      {% for post in object_list %}
+      <div class="card card-cascade wider">
+
+        <!-- Card image -->
+        <div class="view view-cascade overlay">
+          <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap">
+          <a href="#!">
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+      
+        <!-- Card content -->
+        <div class="card-body card-body-cascade text-center">
+      
+          <!-- Title -->
+          <h4 class="card-title"><strong>{{post.name}}</strong></h4>
+          <!-- Subtitle -->
+
+          <p class="card-text">{{post.description}}</p>
+      
+          <!-- Linkedin -->
+          <a class="px-2 fa-lg li-ic"><i class="fab fa-linkedin-in"></i></a>
+          <!-- Twitter -->
+          <a class="px-2 fa-lg tw-ic"><i class="fab fa-twitter"></i></a>
+          <!-- Dribbble -->
+          <a class="px-2 fa-lg fb-ic"><i class="fab fa-facebook-f"></i></a>
+      
+        </div>
+      
+      </div>
+      <!-- Card Wider -->
+      {%endfor%}
+    </div>
+    <div class="col-md-2 hidden-xs"></div>
+  </div>
+</div>
 {%endblock%}
