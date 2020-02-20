@@ -20,6 +20,21 @@ class Post(models.Model):
   posted_on = models.DateTimeField(auto_now_add=True,null = True)
   description = models.TextField(max_length = 200)
 
+  def no_of_ratings(self):
+    ratings = Rating.objects.filter(post=self)
+    return len(ratings)
+
+  def avg_rating(self):
+    sum = 0
+    ratings = Rating.objects.filter(post=self)
+    for rating in ratings:
+      sum += rating.stars
+    if len(ratings) > 0:
+      return ' '.join(['Average rating',str(sum / len(ratings))])
+    else:
+      return 'No ratings yet'
+    
+
   def __str__(self):
     return self.name
 

@@ -12,9 +12,9 @@
       <div class="card card-cascade wider">
 
         <!-- Card image -->
-        <div class="view view-cascade overlay">
+        <div class="view view-cascade">
           <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap">
-          <a href="#!">
+          <a href="{% url 'details' post.pk %}">
             <div class="mask rgba-white-slight"></div>
           </a>
         </div>
