@@ -44,6 +44,7 @@ class PostDisplay(DetailView):
     context['form'] = RateForm
     return context
 
+@method_decorator(login_required, name='dispatch')
 class PostRating(FormView):
   form_class = RateForm
   template_name = 'details.html'
@@ -58,6 +59,7 @@ class PostRating(FormView):
   def get_success_url(self):
     return reverse('details',kwargs={'pk':self.kwargs['pk']})
 
+@method_decorator(login_required, name='dispatch')
 class PostDetail(View):
   def get(self, request, *args,**kwargs):
     view = PostDisplay.as_view()

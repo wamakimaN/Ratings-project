@@ -1,4 +1,6 @@
-
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{%block content%}
 <div class="container">
   <div class="row">
     <div class="col-md-3"></div>
@@ -6,7 +8,7 @@
       <!-- Material form subscription -->
       <div class="card">
 
-        <h5 class="card-header secondary-color white-text text-center py-4">
+        <h5 class="card-header info-color white-text text-center py-4">
           <strong>Signup</strong>
         </h5>
 
@@ -14,10 +16,10 @@
         <div class="card-body px-lg-5">
 
           <!-- Form -->
-          <form method="post" class="text-center" style="color: #757575;" action="#!" novalidate>
+          <form method="post" class="text-center" style="color: #757575;" action="next" novalidate>
 
             {% csrf_token %}
-            {{form.as_p}}
+            {{form|crispy}}
             <p><input class="btn btn-outline-success" type="submit" value="signup"></p>
 
           </form>
@@ -31,3 +33,4 @@
     <div class="col-md-3"></div>
   </div>
 </div>
+{%endblock%}

@@ -1,28 +1,57 @@
 {% extends 'base.html' %}
 {%block content%}
+{% load crispy_forms_tags %}
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
 
-      {{post.name}}
-      {{post.description}}
-      {{post.avg_rating}}
-      
+      <div class="card card-cascade wider reverse">
+
+        <!-- Card image -->
+        <div class="view view-cascade overlay">
+          <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap">
+          <a href="#!">
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+
+        <!-- Card content -->
+        <div class="card-body card-body-cascade text-center">
+
+          <!-- Title -->
+          <h4 class="card-title"><strong>{{post.name}}</strong></h4>
+          <!-- Text -->
+          <p class="card-text">{{post.description}}
+          </p>
+
+          <a class="px-2 fa-lg tw-ic"><i class="fas fa-chart-line"></i> {{post.avg_rating}}</a>
+
+        </div>
+
+      </div>
     </div>
     <div class="col-md-12">
-      <div class="form">
-        <form action="details" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <p><input class="btn btn-outline-danger" type="submit" value="Post"></p>
-        </form>
-        {% for rating in ratings %}
-      <p>{{rating.remark}}</p>
+      <div class="card card-cascade wider">
+        <div class="form">
+          <form action="details" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <p><input class="btn btn-outline-danger" type="submit" value="Post"></p>
+          </form>
 
-        <p>{{rating.stars}} out of 5</p>
-
-        {%endfor%}
+        </div>
       </div>
+      <h3>Comments</h3>
+
+      {% for rating in ratings %}
+      <div class="card">
+        <h5><strong>{{rating.user}}</strong></h5>
+        <p class="card-text">{{rating.remark}}</p>
+
+        <p>Rating: {{rating.stars}} out of 5</p>
+      </div>
+      {%endfor%}
     </div>
   </div>
 </div>
